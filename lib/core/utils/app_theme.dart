@@ -6,6 +6,7 @@ class AppTheme{
 static final ThemeData lightTheme = ThemeData(
   scaffoldBackgroundColor: AppColors.white,
   canvasColor: AppColors.primary,
+  hoverColor: AppColors.white,
   textTheme: TextTheme(
     headlineSmall: AppStyles.regular12primary,
     displayLarge: AppStyles.semiBold24Primary,
@@ -19,6 +20,7 @@ static final ThemeData lightTheme = ThemeData(
 );
 static final ThemeData darkTheme = ThemeData(
   scaffoldBackgroundColor: AppColors.primaryDark,
+    hoverColor: AppColors.primary,
     canvasColor: AppColors.white,
     textTheme: TextTheme(
         headlineSmall: AppStyles.regular12white,
