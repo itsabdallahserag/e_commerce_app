@@ -15,7 +15,9 @@ static final ThemeData lightTheme = ThemeData(
     bodyMedium: AppStyles.light18Primary,
     bodySmall: AppStyles.light18White,
     displayMedium: AppStyles.medium18primary,
-    displaySmall: AppStyles.regular18primary
+    labelSmall: AppStyles.medium18white,
+    displaySmall: AppStyles.regular18primary,
+      headlineMedium: AppStyles.regular12Primary
   )
 );
 static final ThemeData darkTheme = ThemeData(
@@ -23,6 +25,8 @@ static final ThemeData darkTheme = ThemeData(
     hoverColor: AppColors.primary,
     canvasColor: AppColors.white,
     textTheme: TextTheme(
+        headlineMedium: AppStyles.regular12Primary,
+        labelSmall: AppStyles.medium18white,
         headlineSmall: AppStyles.regular12white,
         headlineLarge: AppStyles.semiBold20White,
         displayLarge: AppStyles.semiBold24White,
