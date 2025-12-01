@@ -1,7 +1,9 @@
 import 'package:e_commerce_app/config/di.dart';
 import 'package:e_commerce_app/core/utils/app_colors.dart';
 import 'package:e_commerce_app/core/utils/app_images.dart';
+import 'package:e_commerce_app/domain/entites/responce/brands/brand.dart';
 import 'package:e_commerce_app/domain/entites/responce/categories/category.dart';
+import 'package:e_commerce_app/features/ui/pages/home/tabs/home_tab/cubit/brands_view_model.dart';
 import 'package:e_commerce_app/features/ui/pages/home/tabs/home_tab/cubit/categories_view_model.dart';
 import 'package:e_commerce_app/features/ui/pages/home/tabs/home_tab/cubit/home_tab_states.dart';
 import 'package:e_commerce_app/features/ui/pages/home/tabs/home_tab/widgets/build_row.dart';
@@ -22,10 +24,14 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   CategoriesViewModel viewModel = getIt<CategoriesViewModel>();
+  BrandsViewModel brandsViewModel = getIt<BrandsViewModel>();
+  List<Category>? categoryList ;
+  List<Brand>? brandList ;
   @override
   void initState() {
     super.initState();
     viewModel.getAllCategories();
+    brandsViewModel.getAllBrand();
   }
   @override
   Widget build(BuildContext context) {
@@ -71,7 +77,7 @@ class _HomeTabState extends State<HomeTab> {
                       viewModel.getAllCategories();
                     },);
                   }else if(state is CategoriesSuccessState){
-                   return CategoryBrandGridView(categoryBrandList: state.categoriesList??[]);
+                   return CategoryBrandGridView(items: state.categoriesList! );
                   }else{
                     return MainLoadingWidget() ;
                   }return Container();
@@ -79,7 +85,20 @@ class _HomeTabState extends State<HomeTab> {
             ),
             BuildRow(text: 'Brand',onPressed: () {},),
             SizedBox(height: 10.h,),
-            //CategoryBrandGridView(dataName: 'serag',imageUrl: AppImages.imageSlide1,)
+            BlocBuilder<BrandsViewModel,BrandsStates>(
+              bloc: brandsViewModel,
+              builder: (context, state){
+                if(state is BrandsErrorState){
+                  return MainErrorWidget(message: state.message,onRetry: () {
+                    brandsViewModel.getAllBrand();
+                  },);
+                }else if(state is BrandsSuccessState){
+                  return CategoryBrandGridView(items: state.brandsList! );
+                }else{
+                  return MainLoadingWidget() ;
+                }return Container();
+              },
+            ),
           ],
         ),
       ),

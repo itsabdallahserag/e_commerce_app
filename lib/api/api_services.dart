@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart'; import 'package:e_commerce_app/api/end_points.dart';
 import 'package:e_commerce_app/api/models/request/login_request_dto.dart';
 import 'package:e_commerce_app/api/models/responce/auth_responce_dto.dart';
+import 'package:e_commerce_app/api/models/responce/brands/brands_responce_dto.dart';
 import 'package:e_commerce_app/api/models/responce/categories/categories_responce_dto.dart';
 import 'package:retrofit/retrofit.dart'; import 'models/request/register_request_dto.dart';
 part 'api_services.g.dart';
@@ -13,4 +14,6 @@ abstract class ApiServices {
   Future<AuthResponceDto> register(@Body() RegisterRequestDto registerRequest);
   @GET(EndPoints.apiCategories)
   Future<CategoriesResponceDto> getAllCategories();
+  @GET(EndPoints.apiBrands)
+  Future<BrandsResponceDto> getAllBrand();
 }

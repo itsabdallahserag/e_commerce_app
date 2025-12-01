@@ -1,36 +1,44 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:e_commerce_app/domain/entites/responce/categories/category.dart';
+import 'package:e_commerce_app/core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class CategoryBrandItem extends StatelessWidget {
-  final Category category ;
-  const CategoryBrandItem({super.key,required this.category});
+  final String imageUrl;
+  final String text;
+
+  const CategoryBrandItem({
+    super.key,
+    required this.imageUrl,
+    required this.text,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 100.w, // ثابت لكل عنصر
-      height: 120.h, // ثابت لكل عنصر
+      width: 140.w,
+      height: 140.h,
       alignment: Alignment.center,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
-            height: 75.h,
-            width: 75.h,
+            height: 100.h,
+            width: 100.w,
             child: ClipOval(
-              clipBehavior: Clip.antiAlias,
               child: CachedNetworkImage(
                 fit: BoxFit.cover,
-                imageUrl: category.image!,
-                placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
+                imageUrl: imageUrl,
+                placeholder: (context, url) =>
+                const Center(child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) =>
+                const Icon(Icons.error, size: 40,color: AppColors.red,),
               ),
             ),
           ),
-          const SizedBox(height: 5), // مسافة ثابتة بين الصورة والنص
+          SizedBox(height: 5.h),
           Text(
-            category.name!,
+            text,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
