@@ -2,6 +2,8 @@
 import 'package:e_commerce_app/config/di.dart';
 import 'package:e_commerce_app/core/utils/app_routes.dart';
 import 'package:e_commerce_app/core/utils/app_theme.dart';
+import 'package:e_commerce_app/features/ui/pages/cart/cart_screen.dart';
+import 'package:e_commerce_app/features/ui/pages/product_details/product_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'features/ui/auth/login/login_screen.dart';
@@ -24,11 +26,13 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          initialRoute:AppRoutes.home ,
+          initialRoute:AppRoutes.login ,
           routes: {
             AppRoutes.login : (context) => LoginScreen(),
             AppRoutes.register : (context) => RegisterScreen(),
             AppRoutes.home : (context) => HomeScreen(),
+            AppRoutes.productDetails : (context) => ProductDetailsScreen(),
+            AppRoutes.cartDetails : (context) => CartScreen(),
           },
           theme: AppTheme.lightTheme,
           themeMode: ThemeMode.light,

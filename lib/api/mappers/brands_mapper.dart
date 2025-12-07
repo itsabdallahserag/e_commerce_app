@@ -2,7 +2,7 @@ import 'package:e_commerce_app/api/models/responce/brands/brand_dto.dart';
 import 'package:e_commerce_app/domain/entites/responce/brands/brand.dart';
 
 extension BrandsMapper on BrandDto{
-  toBrand(){
+  Brand toBrand(){
     return Brand(
       name: name,
       image: image,

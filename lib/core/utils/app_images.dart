@@ -12,4 +12,6 @@ class AppImages{
  static const String iconProductPrimary = 'assets/images/iconproductprimary.png';
  static const String iconFavoritePrimary = 'assets/images/iconfavoriteprimary.png';
  static const String iconUserPrimary = 'assets/images/iconuserprimary.png';
+ static const String iconStar = 'assets/images/iconStar.png';
+ static const String iconCart2 = 'assets/images/iconcart2.png';
 }
