@@ -3,6 +3,7 @@ import 'package:e_commerce_app/api/models/request/login_request_dto.dart';
 import 'package:e_commerce_app/api/models/responce/auth_responce_dto.dart';
 import 'package:e_commerce_app/api/models/responce/brands/brands_responce_dto.dart';
 import 'package:e_commerce_app/api/models/responce/categories/categories_responce_dto.dart';
+import 'package:e_commerce_app/api/models/responce/products/products_responce_dto.dart';
 import 'package:retrofit/retrofit.dart'; import 'models/request/register_request_dto.dart';
 part 'api_services.g.dart';
 @RestApi(baseUrl: EndPoints.baseUrl)
@@ -16,4 +17,6 @@ abstract class ApiServices {
   Future<CategoriesResponceDto> getAllCategories();
   @GET(EndPoints.apiBrands)
   Future<BrandsResponceDto> getAllBrand();
+  @GET(EndPoints.apiProducts)
+  Future<ProductsResponceDto> getAllProduct();
 }
