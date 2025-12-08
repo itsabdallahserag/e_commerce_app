@@ -1,5 +1,6 @@
 
 import 'package:e_commerce_app/config/di.dart';
+import 'package:e_commerce_app/core/cash/shared_prefs_utils.dart';
 import 'package:e_commerce_app/core/utils/app_routes.dart';
 import 'package:e_commerce_app/core/utils/app_theme.dart';
 import 'package:e_commerce_app/features/ui/pages/cart/cart_screen.dart';
@@ -12,10 +13,18 @@ import 'features/ui/pages/home/home_screen.dart';
 
 void main(){
   configureDependencies();
-  runApp(MyApp());
+  String routeName ;
+  var token = SharedPrefsUtils.getData(key: 'token');
+  if(token == null){
+    routeName = AppRoutes.login ;
+  }else{
+    routeName = AppRoutes.home;
+  }
+  runApp(MyApp(routeName:routeName));
 }
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String routeName ;
+  const MyApp({super.key,required this.routeName});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +35,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          initialRoute:AppRoutes.login ,
+          initialRoute:routeName ,
           routes: {
             AppRoutes.login : (context) => LoginScreen(),
             AppRoutes.register : (context) => RegisterScreen(),
