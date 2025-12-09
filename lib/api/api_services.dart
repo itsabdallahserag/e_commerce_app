@@ -2,9 +2,12 @@ import 'package:dio/dio.dart'; import 'package:e_commerce_app/api/end_points.dar
 import 'package:e_commerce_app/api/models/request/login_request_dto.dart';
 import 'package:e_commerce_app/api/models/responce/auth_responce_dto.dart';
 import 'package:e_commerce_app/api/models/responce/brands/brands_responce_dto.dart';
+import 'package:e_commerce_app/api/models/responce/cart/addcart/add_cart_responce_dto.dart';
 import 'package:e_commerce_app/api/models/responce/categories/categories_responce_dto.dart';
 import 'package:e_commerce_app/api/models/responce/products/products_responce_dto.dart';
-import 'package:retrofit/retrofit.dart'; import 'models/request/register_request_dto.dart';
+import 'package:e_commerce_app/domain/entites/request/add_product_request.dart';
+import 'package:retrofit/retrofit.dart'; import 'models/request/add_product_request_dto.dart';
+import 'models/request/register_request_dto.dart';
 part 'api_services.g.dart';
 @RestApi(baseUrl: EndPoints.baseUrl)
 abstract class ApiServices {
@@ -19,4 +22,8 @@ abstract class ApiServices {
   Future<BrandsResponceDto> getAllBrand();
   @GET(EndPoints.apiProducts)
   Future<ProductsResponceDto> getAllProduct();
+  @POST(EndPoints.apiAddProductToCart)
+  Future<AddCartResponceDto>addCart(
+      @Body() AddProductRequestDto productRequest,
+      @Header('token') String token);
 }

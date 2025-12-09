@@ -1,9 +1,15 @@
+import 'package:badges/badges.dart' as badges;
 import 'package:e_commerce_app/core/utils/app_colors.dart';
 import 'package:e_commerce_app/core/utils/app_images.dart';
 import 'package:e_commerce_app/core/utils/app_styles.dart';
+import 'package:e_commerce_app/core/utils/toast_utils.dart';
 import 'package:e_commerce_app/domain/entites/responce/products/product.dart';
+import 'package:e_commerce_app/features/ui/pages/cart/cart_screen.dart';
+import 'package:e_commerce_app/features/ui/pages/cart/cubit/cart_states.dart';
+import 'package:e_commerce_app/features/ui/pages/cart/cubit/cart_view_model.dart';
 import 'package:e_commerce_app/features/ui/pages/product_details/widgets/product_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:readmore/readmore.dart';
 class ProductDetailsScreen extends StatefulWidget {
@@ -17,13 +23,44 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     var product = ModalRoute.of(context)!.settings.arguments as Product ;
-    return Scaffold(
+    return  BlocListener<CartViewModel,CartStates>(
+        listener: (context, state) {
+          if(state is CartSuccesState){
+            ToastUtils.showToastMsg(message: 'product added successfully', backgroundColor: AppColors.grayLight, textColor: AppColors.primary);
+          }else if (state is CartErrorState){
+            ToastUtils.showToastMsg(message: 'Error in adding product', backgroundColor: AppColors.red, textColor: AppColors.white);
+          }
+        },
+        child: Scaffold(
       appBar: AppBar(
         title: Text('Product Details',style:AppStyles.medium20primary,),
         centerTitle: true,
         actions: [
           Icon(Icons.search_outlined,color: AppColors.primary,size: 22,),
-          IconButton(onPressed: () {}, icon:Image.asset(AppImages.iconCart) )
+          BlocBuilder<CartViewModel,CartStates>
+            (builder:(context, state) {
+            return GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => CartScreen(),));
+              },
+              child: badges.Badge(
+                position: badges.BadgePosition.topEnd(top: -2, end: -2),
+                // todo : Animation
+                badgeAnimation: badges.BadgeAnimation.scale(
+                  animationDuration: Duration(milliseconds: 300),
+                  curve: Curves.easeOutBack,
+                ),
+                badgeContent: Text(
+                  '${CartViewModel.get(context).numCartItems}', style: TextStyle(color: Colors.white),),
+                badgeStyle: badges.BadgeStyle(
+                  shape: badges.BadgeShape.circle,
+                  badgeColor: Colors.red,
+                ),
+                child: Image.asset(AppImages.iconCart),
+              ),
+            );
+          },
+          ),
         ],
       ),
       body: Padding(
@@ -105,7 +142,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 Spacer(),
                 InkWell(
                   // todo : add product to cart
-                  onTap: () {},
+                  onTap: () {
+                    CartViewModel.get(context).addCart(product.id!);
+                  },
                   child: Container(
                     height: 50.h,
                     width: 270.w,
@@ -117,7 +156,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Image.asset(AppImages.iconCart2),
-                        SizedBox(width: 25,),
+                        SizedBox(width: 20,),
                         Text('Add to cart',style: AppStyles.medium20white,)
                       ],
                     ),
@@ -129,6 +168,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ],
         ),
       ),
+            )
     );
   }
 }
