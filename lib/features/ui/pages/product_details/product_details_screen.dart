@@ -21,6 +21,11 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
+  void initState() {
+    super.initState();
+    CartViewModel.get(context).getCart();
+  }
+  @override
   Widget build(BuildContext context) {
     var product = ModalRoute.of(context)!.settings.arguments as Product ;
     return  BlocListener<CartViewModel,CartStates>(

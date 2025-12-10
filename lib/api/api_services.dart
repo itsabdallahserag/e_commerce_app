@@ -3,6 +3,7 @@ import 'package:e_commerce_app/api/models/request/login_request_dto.dart';
 import 'package:e_commerce_app/api/models/responce/auth_responce_dto.dart';
 import 'package:e_commerce_app/api/models/responce/brands/brands_responce_dto.dart';
 import 'package:e_commerce_app/api/models/responce/cart/addcart/add_cart_responce_dto.dart';
+import 'package:e_commerce_app/api/models/responce/cart/getcart/get_cart_responce_dto.dart';
 import 'package:e_commerce_app/api/models/responce/categories/categories_responce_dto.dart';
 import 'package:e_commerce_app/api/models/responce/products/products_responce_dto.dart';
 import 'package:e_commerce_app/domain/entites/request/add_product_request.dart';
@@ -25,5 +26,8 @@ abstract class ApiServices {
   @POST(EndPoints.apiAddProductToCart)
   Future<AddCartResponceDto>addCart(
       @Body() AddProductRequestDto productRequest,
+      @Header('token') String token);
+  @GET(EndPoints.apiAddProductToCart)
+  Future<GetCartResponceDto>getCart(
       @Header('token') String token);
 }

@@ -1,108 +1,222 @@
+import 'package:badges/badges.dart' as badges;
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_app/core/utils/app_colors.dart';
 import 'package:e_commerce_app/core/utils/app_images.dart';
 import 'package:e_commerce_app/core/utils/app_styles.dart';
+import 'package:e_commerce_app/features/ui/pages/cart/cubit/cart_states.dart';
+import 'package:e_commerce_app/features/ui/pages/cart/cubit/cart_view_model.dart';
+import 'package:e_commerce_app/features/ui/widgets/main_error_widget.dart';
+import 'package:e_commerce_app/features/ui/widgets/main_loading_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-class CartScreen extends StatelessWidget {
+
+class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
+
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  @override
+  void initState() {
+    super.initState();
+    CartViewModel.get(context).getCart();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cart',style:AppStyles.medium20primary,),
+        title: Text('Cart', style: AppStyles.medium20primary),
         centerTitle: true,
         actions: [
-          IconButton(onPressed: () {}, icon:Icon(Icons.search_outlined,color: AppColors.primary,size: 22,),),
-          IconButton(onPressed: () {}, icon:Image.asset(AppImages.iconCart) )
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.search_outlined, color: AppColors.primary, size: 22),
+          ),
+          BlocBuilder<CartViewModel, CartStates>(
+            builder: (context, state) {
+              return badges.Badge(
+                position: badges.BadgePosition.topEnd(top: -2, end: -2),
+                badgeAnimation: badges.BadgeAnimation.scale(
+                  animationDuration: Duration(milliseconds: 300),
+                  curve: Curves.easeOutBack,
+                ),
+                badgeContent: Text(
+                  '${CartViewModel.get(context).numCartItems}',
+                  style: TextStyle(color: Colors.white),
+                ),
+                badgeStyle: badges.BadgeStyle(
+                  shape: badges.BadgeShape.circle,
+                  badgeColor: Colors.red,
+                ),
+                child: Image.asset(AppImages.iconCart),
+              );
+            },
+          ),
         ],
       ),
-      body: Column(
-        children: [
-          Container(
-            height: 115.h,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(
-                color: AppColors.grayLight
-              )
-            ),
-            child: Row(
-              children: [
-                  Container(
-                    width: 120.w,
-                    height: 114.h,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(
-                        color: AppColors.grayLight
-                      )
-                    ),
-                    child: Image.asset(AppImages.imageSlide3,fit: BoxFit.cover,),
-                  ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Nike',style: AppStyles.medium18primary,),
-                        IconButton(onPressed: () {}, icon: Icon(Icons.delete_forever,size: 22,color: AppColors.primary,))
-                      ],
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: AppColors.primary
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          IconButton(onPressed: () {},icon: Icon(Icons.remove_circle_outline,size: 22,color: AppColors.white,)),
-                          Text('1',style:AppStyles.medium18white,),
-                          IconButton(onPressed: () {},icon: Icon(Icons.add_circle_outline_outlined,size: 22,color: AppColors.white,)),
-              ],
-            ),
-          ),
-          Row(
-            children: [
-              Column(
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: BlocBuilder<CartViewModel, CartStates>(
+          builder: (context, state) {
+            if (state is GetCartErrorState) {
+              return MainErrorWidget(
+                message: state.message,
+                onRetry: () {
+                  CartViewModel.get(context).getCart();
+                },
+              );
+            } else if (state is GetCartSuccesState) {
+              return Column(
                 children: [
-                  Text('Total price',style: AppStyles.medium18gray,),
-                  Text('EGP 3,500',style: AppStyles.medium18primary,)
-                ],
-              ),
-              InkWell(
-                // todo : add product to cart
-                onTap: () {},
-                child: Expanded(
-                    flex: 3,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: AppColors.primary
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  Expanded(
+                    child: ListView.separated(
+                      itemBuilder: (context, index) {
+                        final product = state.getCart.products![index].product!;
+                        return Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            border: Border.all(color: AppColors.grayLight),
+                          ),
+                          child: IntrinsicHeight(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                buildImageContainer(imageCover: product.imageCover ?? ''),
+                                SizedBox(width: 8.w),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      // TITLE + DELETE
+                                      Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              product.title!,
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: AppStyles.medium18primary,
+                                            ),
+                                          ),
+                                          IconButton(
+                                            onPressed: () {},
+                                            icon: Icon(Icons.delete_forever, size: 26, color: AppColors.primary),
+                                          )
+                                        ],
+                                      ),
+
+                                      // PRICE + QTY
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              'EGP ${state.getCart.products![index].price}',
+                                              style: AppStyles.medium18primary,
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 125.w,
+                                            height: 45.h,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(20),
+                                              color: AppColors.primary,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                InkWell(
+                                                  onTap: () {},
+                                                  child: Icon(Icons.remove_circle_outline, size: 20, color: Colors.white),
+                                                ),
+                                                Text(
+                                                  '${state.getCart.products![index].count ?? 1}',
+                                                  style: AppStyles.medium18white,
+                                                ),
+                                                InkWell(
+                                                  onTap: () {},
+                                                  child: Icon(Icons.add_circle_outline, size: 20, color: Colors.white),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) => SizedBox(height: 10.h),
+                      itemCount: state.getCart.products?.length ?? 0,
+                    ),
+                  ),
+                  SizedBox(height: 20.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Image.asset(AppImages.iconCart2),
-                          SizedBox(width: 25,),
-                          Text('Add to cart',style: AppStyles.medium20white,)
+                          Text('Total price', style: AppStyles.medium18gray),
+                          Text('EGP ${state.getCart.totalCartPrice}', style: AppStyles.medium18primary),
                         ],
                       ),
-                    )
-                ),
-              )
-            ],
-          )
-        ],
-                )
-              ]
-            ),
-      )
-        ])
-      );
+                      InkWell(
+                        onTap: () {},
+                        child: Container(
+                          height: 50.h,
+                          width: 270.w,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: AppColors.primary,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text('Check Out', style: AppStyles.medium20white),
+                              Icon(Icons.arrow_right_alt, size: 22, color: AppColors.white)
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20.h)
+                ],
+              );
+            } else {
+              return MainLoadingWidget();
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget buildImageContainer({required String imageCover}) {
+    return Container(
+      width: 140.w,
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: AppColors.grayLight),
+      ),
+      child: CachedNetworkImage(
+        imageUrl: imageCover,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+        errorWidget: (context, url, error) => Icon(Icons.broken_image),
+      ),
+    );
   }
 }
