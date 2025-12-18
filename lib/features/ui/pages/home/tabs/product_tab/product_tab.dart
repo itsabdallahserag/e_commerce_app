@@ -1,7 +1,7 @@
 import 'package:e_commerce_app/config/di.dart';
 import 'package:e_commerce_app/core/utils/app_colors.dart';
 import 'package:e_commerce_app/core/utils/app_routes.dart';
-import 'package:e_commerce_app/core/utils/toast_utils.dart';
+import 'package:e_commerce_app/core/utils/app_toast_utils.dart';
 import 'package:e_commerce_app/features/ui/pages/cart/cubit/cart_states.dart';
 import 'package:e_commerce_app/features/ui/pages/cart/cubit/cart_view_model.dart';
 import 'package:e_commerce_app/features/ui/pages/home/tabs/product_tab/cubit/products_tab_states.dart';
@@ -29,9 +29,9 @@ class _ProductTabState extends State<ProductTab> {
     return BlocListener<CartViewModel,CartStates>(
       listener: (context, state) {
         if(state is CartSuccesState){
-          ToastUtils.showToastMsg(message: 'product added successfully', backgroundColor: AppColors.grayLight, textColor: AppColors.primary);
+          AppToastUtils.showToastMsg(message: 'product added successfully', backgroundColor: AppColors.grayLight, textColor: AppColors.primary);
         }else if (state is CartErrorState){
-          ToastUtils.showToastMsg(message: 'Error in adding product', backgroundColor: AppColors.red, textColor: AppColors.white);
+          AppToastUtils.showToastMsg(message: 'Error in adding product', backgroundColor: AppColors.red, textColor: AppColors.white);
         }
       },
       child: BlocBuilder<ProductsViewModel,ProductsTabStates>(

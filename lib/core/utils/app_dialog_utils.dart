@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-class DialogUtils {
+class AppDialogUtils {
   // ─────────────────────────────────────────────
   // Show Loading Dialog
   // ─────────────────────────────────────────────

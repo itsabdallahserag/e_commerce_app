@@ -2,7 +2,7 @@ import 'package:badges/badges.dart' as badges;
 import 'package:e_commerce_app/core/utils/app_colors.dart';
 import 'package:e_commerce_app/core/utils/app_images.dart';
 import 'package:e_commerce_app/core/utils/app_styles.dart';
-import 'package:e_commerce_app/core/utils/toast_utils.dart';
+import 'package:e_commerce_app/core/utils/app_toast_utils.dart';
 import 'package:e_commerce_app/domain/entites/responce/products/product.dart';
 import 'package:e_commerce_app/features/ui/pages/cart/cart_screen.dart';
 import 'package:e_commerce_app/features/ui/pages/cart/cubit/cart_states.dart';
@@ -31,9 +31,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     return  BlocListener<CartViewModel,CartStates>(
         listener: (context, state) {
           if(state is CartSuccesState){
-            ToastUtils.showToastMsg(message: 'product added successfully', backgroundColor: AppColors.grayLight, textColor: AppColors.primary);
+            AppToastUtils.showToastMsg(message: 'product added successfully', backgroundColor: AppColors.grayLight, textColor: AppColors.primary);
           }else if (state is CartErrorState){
-            ToastUtils.showToastMsg(message: 'Error in adding product', backgroundColor: AppColors.red, textColor: AppColors.white);
+            AppToastUtils.showToastMsg(message: 'Error in adding product', backgroundColor: AppColors.red, textColor: AppColors.white);
           }
         },
         child: Scaffold(
