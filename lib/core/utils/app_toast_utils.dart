@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class ToastUtils {
+class AppToastUtils {
   static Future<bool?> showToastMsg({
     required String message,
     required Color backgroundColor,

@@ -3,6 +3,7 @@ import 'package:e_commerce_app/api/api_services.dart';
 import 'package:e_commerce_app/api/mappers/add_cart_responce_mapper.dart';
 import 'package:e_commerce_app/api/mappers/get_cart_responce_mapper.dart';
 import 'package:e_commerce_app/api/models/request/add_product_request_dto.dart';
+import 'package:e_commerce_app/api/models/request/count_request_dto.dart';
 import 'package:e_commerce_app/core/cash/shared_prefs_utils.dart';
 import 'package:e_commerce_app/core/exciption/app_exception.dart';
 import 'package:e_commerce_app/data/data_sources/remote/cart/cart_remote_data_source.dart';
@@ -35,6 +36,33 @@ class AddCartRemoteDataSourceImpl implements CartRemoteDataSource{
       var token = SharedPrefsUtils.getData(key: 'token') as String?;
       var getCartResponce = await apiServices.getCart(token??'');
       return getCartResponce.toGetCartResponce();
+    }on DioException catch (e){
+      String? message = e.error is AppException ? (e.error as AppException).message ?? '' : e.message;
+      throw ServerException(message: message);
+    }
+  }
+
+  @override
+  Future<GetCartResponce> deleteProductFromCart(String productId)async {
+    try{
+      var token = SharedPrefsUtils.getData(key: 'token') as String?;
+      var deleteItemCartResponce = await apiServices.deleteProductFromCart(productId, token??"");
+      return deleteItemCartResponce.toGetCartResponce();
+    }on DioException catch (e){
+      String? message = e.error is AppException ? (e.error as AppException).message ?? '' : e.message;
+      throw ServerException(message: message);
+    }
+  }
+
+  @override
+  Future<GetCartResponce> updateProductInCart(String productId, int count)async {
+    try{
+      CountRequestDto countRequestDto = CountRequestDto(
+        count: '$count'
+      );
+      var token = SharedPrefsUtils.getData(key: 'token') as String?;
+      var updateItemCartResponce = await apiServices.updateProductInCart(productId, token??'', countRequestDto);
+      return updateItemCartResponce.toGetCartResponce();
     }on DioException catch (e){
       String? message = e.error is AppException ? (e.error as AppException).message ?? '' : e.message;
       throw ServerException(message: message);

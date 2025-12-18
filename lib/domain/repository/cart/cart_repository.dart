@@ -4,5 +4,6 @@ import 'package:e_commerce_app/domain/entites/responce/cart/getcart/get_cart_res
 abstract class CartRepository{
   Future<AddCartResponce> addCart (String productId);
   Future<GetCartResponce> getCart ();
+  Future<GetCartResponce> deleteProductFromCart (String productId);
+  Future<GetCartResponce> updateProductInCart (String productId,int count);
 }
-
