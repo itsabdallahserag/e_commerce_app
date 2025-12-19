@@ -14,9 +14,28 @@ class CartErrorState extends CartStates{
 class GetCartLoadingState extends CartStates{}
 class GetCartSuccesState extends CartStates{
   GetCart getCart;
-  GetCartSuccesState({required this.getCart});
+  String? message;
+  GetCartSuccesState({required this.getCart,this.message});
 }
 class GetCartErrorState extends CartStates{
   String message;
   GetCartErrorState({required this.message});
+}
+class DeleteItemLoadingState extends CartStates{}
+class DeleteItemSuccesState extends CartStates{
+  GetCart getCart;
+  DeleteItemSuccesState({required this.getCart});
+}
+class DeleteItemErrorState extends CartStates{
+  String message;
+  DeleteItemErrorState({required this.message});
+}
+class UpdateItemLoadingState extends CartStates{}
+class UpdateItemSuccesState extends CartStates{
+  GetCart getCart;
+  UpdateItemSuccesState({required this.getCart});
+}
+class UpdateItemErrorState extends CartStates{
+  String message;
+  UpdateItemErrorState({required this.message});
 }

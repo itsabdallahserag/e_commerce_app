@@ -7,6 +7,7 @@ import 'package:e_commerce_app/api/models/responce/cart/addcart/add_cart_responc
 import 'package:e_commerce_app/api/models/responce/cart/getcart/get_cart_responce_dto.dart';
 import 'package:e_commerce_app/api/models/responce/categories/categories_responce_dto.dart';
 import 'package:e_commerce_app/api/models/responce/products/products_responce_dto.dart';
+import 'package:e_commerce_app/api/models/responce/wishlist/add_wishlist_responce_dto.dart';
 import 'package:retrofit/retrofit.dart'; import 'models/request/add_product_request_dto.dart';
 import 'models/request/register_request_dto.dart';
 part 'api_services.g.dart';
@@ -40,4 +41,8 @@ abstract class ApiServices {
       @Header('token') String token,
       @Body() CountRequestDto countRequestDto
       );
+  @POST(EndPoints.apiAddProductToWishList)
+  Future<AddWishListResponceDto>addWishList(
+      @Body() AddProductRequestDto productRequest,
+      @Header('token') String token);
 }

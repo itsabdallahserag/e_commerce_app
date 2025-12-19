@@ -7,11 +7,13 @@ import 'package:e_commerce_app/domain/entites/responce/products/product.dart';
 import 'package:e_commerce_app/features/ui/pages/cart/cart_screen.dart';
 import 'package:e_commerce_app/features/ui/pages/cart/cubit/cart_states.dart';
 import 'package:e_commerce_app/features/ui/pages/cart/cubit/cart_view_model.dart';
+import 'package:e_commerce_app/features/ui/pages/home/tabs/favorite_tab/cubit/wishlist_view_model.dart';
 import 'package:e_commerce_app/features/ui/pages/product_details/widgets/product_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:readmore/readmore.dart';
+import '../home/tabs/favorite_tab/cubit/wishlist_states.dart';
 class ProductDetailsScreen extends StatefulWidget {
   const ProductDetailsScreen({super.key});
 
@@ -28,10 +30,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     var product = ModalRoute.of(context)!.settings.arguments as Product ;
-    return  BlocListener<CartViewModel,CartStates>(
+    return  BlocListener<WishListViewModel, WishListStates>(
+        listener: (context, state) {
+          if (state is AddWishListSuccesState) {
+            AppToastUtils.showToastMsg(
+              message: state.message!,
+              backgroundColor: AppColors.blue,
+              textColor: AppColors.white,
+            );
+          } else if (state is AddWishListErrorState) {
+            AppToastUtils.showToastMsg(
+              message: 'Error in adding product to your wishlist',
+              backgroundColor: AppColors.blue,
+              textColor: AppColors.white,
+            );
+          }
+        },
+      child:BlocListener<CartViewModel,CartStates>(
         listener: (context, state) {
           if(state is CartSuccesState){
-            AppToastUtils.showToastMsg(message: 'product added successfully', backgroundColor: AppColors.grayLight, textColor: AppColors.primary);
+            AppToastUtils.showToastMsg(message: 'product added successfully', backgroundColor: AppColors.blue, textColor: AppColors.white);
           }else if (state is CartErrorState){
             AppToastUtils.showToastMsg(message: 'Error in adding product', backgroundColor: AppColors.red, textColor: AppColors.white);
           }
@@ -73,7 +91,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ProductSlider(productImages: product.images),
+            ProductSlider(productImages: product.images,onTap: () {
+              WishListViewModel.get(context).addWishList(product.id??'');
+            },),
             SizedBox(height:15.h ,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -174,6 +194,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         ),
       ),
             )
+    )
     );
   }
 }

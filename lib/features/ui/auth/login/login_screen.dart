@@ -1,6 +1,6 @@
 import 'package:e_commerce_app/config/di.dart';
 import 'package:e_commerce_app/core/cash/shared_prefs_utils.dart';
-import 'package:e_commerce_app/core/utils/app_dialog.dart';
+import 'package:e_commerce_app/core/utils/app_dialog_utils.dart';
 import 'package:e_commerce_app/core/utils/app_images.dart';
 import 'package:e_commerce_app/core/utils/validators.dart';
 import 'package:e_commerce_app/features/ui/auth/login/cubit/auth_states.dart';
@@ -31,13 +31,13 @@ class _LoginScreenState extends State<LoginScreen> {
       bloc:viewModel ,
       listener:(context, state) {
         if(state is AuthLoagingState){
-          DialogUtils.showLoading(context: context, colorCircle: Theme.of(context).canvasColor,style: Theme.of(context).textTheme.bodyMedium!);
+          AppDialogUtils.showLoading(context: context, colorCircle: Theme.of(context).canvasColor,style: Theme.of(context).textTheme.bodyMedium!);
         }else if(state is AuthErrorState){
-          DialogUtils.hideLoading(context);
-          DialogUtils.showMessage(context: context, message: state.message,title: 'Error' ,style: Theme.of(context).textTheme.bodyMedium!,posActionName: 'oK');
+          AppDialogUtils.hideLoading(context);
+          AppDialogUtils.showMessage(context: context, message: state.message,title: 'Error' ,style: Theme.of(context).textTheme.bodyMedium!,posActionName: 'oK');
         }else if(state is AuthSuccesState){
-          DialogUtils.hideLoading(context);
-          DialogUtils.showMessage(context: context, message: 'Sign In Successfully',title: 'Success' ,style: Theme.of(context).textTheme.bodyMedium!,posActionName: 'oK',
+          AppDialogUtils.hideLoading(context);
+          AppDialogUtils.showMessage(context: context, message: 'Sign In Successfully',title: 'Success' ,style: Theme.of(context).textTheme.bodyMedium!,posActionName: 'oK',
           posActionCallBack:() {
             SharedPrefsUtils.saveData(key: 'token', value: state.authResponce.token??'');
             Navigator.of(context).pushAndRemoveUntil(

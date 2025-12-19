@@ -1,15 +1,43 @@
-import 'package:bloc/bloc.dart';
 import 'package:e_commerce_app/core/exciption/app_exception.dart';
-import 'package:e_commerce_app/domain/entites/responce/cart/getcart/products.dart';
-import 'package:e_commerce_app/domain/use_cases/cart/addcart/add_cart_use_case.dart';
-import 'package:e_commerce_app/domain/use_cases/cart/deletecart/delete_cart_use_case.dart';
-import 'package:e_commerce_app/domain/use_cases/cart/getcart/get_cart_use_case.dart';
-import 'package:e_commerce_app/domain/use_cases/cart/updatecart/update_cart_use_case.dart';
-import 'package:e_commerce_app/features/ui/pages/cart/cubit/cart_states.dart';
+import 'package:e_commerce_app/domain/use_cases/wishlist/addwishlist/add_wishlist_use_case.dart';
+import 'package:e_commerce_app/features/ui/pages/home/tabs/favorite_tab/cubit/wishlist_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 @injectable
-class CartViewModel extends Cubit<CartStates>{
+class WishListViewModel extends Cubit<WishListStates>{
+  AddWishListUseCase addWishListUseCase;
+  WishListViewModel({required this.addWishListUseCase}):super(WishListIntialState());
+  static WishListViewModel get(context) => BlocProvider.of<WishListViewModel>(context);
+  Future<void> addWishList(String productId)async{
+    try{
+      emit(AddWishListLoadingState());
+      var addWishlistResponce = await addWishListUseCase.invoke(productId);
+      var message = addWishlistResponce.message ;
+      emit(AddWishListSuccesState(addWishlistResponce: addWishlistResponce,message: message??''));
+    }on AppException catch(e){
+      emit(AddWishListErrorState(message: e.message??''));
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
   AddCartUseCase addCartUseCase;
   GetCartUseCase getCartUseCase ;
   DeleteItemCartUseCase deleteItemCartUseCase;
@@ -62,4 +90,4 @@ class CartViewModel extends Cubit<CartStates>{
       emit(UpdateItemErrorState(message: e.message!));
     }
   }
-}
+ */

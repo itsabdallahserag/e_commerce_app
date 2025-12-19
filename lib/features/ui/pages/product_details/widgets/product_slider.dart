@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 class ProductSlider extends StatelessWidget {
   final List<String>? productImages  ;
-  const ProductSlider({super.key,required this.productImages});
+  final void Function()? onTap;
+  const ProductSlider({super.key,required this.productImages,required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class ProductSlider extends StatelessWidget {
         ),
         InkWell(
           // todo : add product to favorite
-          onTap: () {},
+          onTap: onTap,
           child: Container(
             padding: const EdgeInsets.all(6),
             margin: const EdgeInsets.all(6),
