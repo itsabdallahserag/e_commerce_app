@@ -7,6 +7,9 @@ import 'package:e_commerce_app/api/models/responce/cart/addcart/add_cart_responc
 import 'package:e_commerce_app/api/models/responce/cart/getcart/get_cart_responce_dto.dart';
 import 'package:e_commerce_app/api/models/responce/categories/categories_responce_dto.dart';
 import 'package:e_commerce_app/api/models/responce/products/products_responce_dto.dart';
+import 'package:e_commerce_app/api/models/responce/wishlist/addwishlist/add_wishlist_responce_dto.dart';
+import 'package:e_commerce_app/api/models/responce/wishlist/deletewishlist/delete_wishlist_responce_dto.dart';
+import 'package:e_commerce_app/api/models/responce/wishlist/getwishlist/get_wishlist_responce_dto.dart';
 import 'package:retrofit/retrofit.dart'; import 'models/request/add_product_request_dto.dart';
 import 'models/request/register_request_dto.dart';
 part 'api_services.g.dart';
@@ -23,11 +26,11 @@ abstract class ApiServices {
   Future<BrandsResponceDto> getAllBrand();
   @GET(EndPoints.apiProducts)
   Future<ProductsResponceDto> getAllProduct();
-  @POST(EndPoints.apiAddProductToCart)
+  @POST(EndPoints.apiAddOrGetProductToCart)
   Future<AddCartResponceDto>addCart(
       @Body() AddProductRequestDto productRequest,
       @Header('token') String token);
-  @GET(EndPoints.apiAddProductToCart)
+  @GET(EndPoints.apiAddOrGetProductToCart)
   Future<GetCartResponceDto>getCart(
       @Header('token') String token);
   @DELETE('${EndPoints.removeProductInCart}{productId}')
@@ -40,4 +43,15 @@ abstract class ApiServices {
       @Header('token') String token,
       @Body() CountRequestDto countRequestDto
       );
+  @POST(EndPoints.apiAddOrGetProductToWishList)
+  Future<AddWishListResponceDto>addWishList(
+      @Body() AddProductRequestDto productRequest,
+      @Header('token') String token);
+  @GET(EndPoints.apiAddOrGetProductToWishList)
+  Future<GetWishlistResponceDto>getWishList(
+      @Header('token') String token);
+  @DELETE('${EndPoints.apiRemoveProducFromWishList}{productId}')
+  Future<DeleteWishlistResponceDto> deleteProductFromWishList(
+      @Path() String productId,
+      @Header('token') String token);
 }

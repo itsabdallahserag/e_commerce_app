@@ -1,15 +1,69 @@
-import 'package:bloc/bloc.dart';
 import 'package:e_commerce_app/core/exciption/app_exception.dart';
-import 'package:e_commerce_app/domain/entites/responce/cart/getcart/products.dart';
-import 'package:e_commerce_app/domain/use_cases/cart/addcart/add_cart_use_case.dart';
-import 'package:e_commerce_app/domain/use_cases/cart/deletecart/delete_cart_use_case.dart';
-import 'package:e_commerce_app/domain/use_cases/cart/getcart/get_cart_use_case.dart';
-import 'package:e_commerce_app/domain/use_cases/cart/updatecart/update_cart_use_case.dart';
-import 'package:e_commerce_app/features/ui/pages/cart/cubit/cart_states.dart';
+import 'package:e_commerce_app/domain/entites/responce/products/product.dart';
+import 'package:e_commerce_app/domain/use_cases/wishlist/addwishlist/add_wishlist_use_case.dart';
+import 'package:e_commerce_app/domain/use_cases/wishlist/deletewishlist/delete_wishlist_use_case.dart';
+import 'package:e_commerce_app/domain/use_cases/wishlist/getwishlist/get_wishlist_use_case.dart';
+import 'package:e_commerce_app/features/ui/pages/home/tabs/favorite_tab/cubit/wishlist_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 @injectable
-class CartViewModel extends Cubit<CartStates>{
+class WishListViewModel extends Cubit<WishListStates>{
+  AddWishListUseCase addWishListUseCase;
+  GetWishListUseCase getWishListUseCase ;
+  DeleteItemWishListUseCase deleteItemWishListUseCase ;
+  WishListViewModel({required this.addWishListUseCase,required this.getWishListUseCase,required this.deleteItemWishListUseCase}):super(WishListIntialState());
+  static WishListViewModel get(context) => BlocProvider.of<WishListViewModel>(context);
+  List<Product> wishList = [] ;
+  Future<void> addWishList(String productId)async{
+    try{
+      emit(AddWishListLoadingState());
+      var addWishlistResponce = await addWishListUseCase.invoke(productId);
+      var message = addWishlistResponce.message ;
+      emit(AddWishListSuccesState(addWishlistResponce: addWishlistResponce,message: message??''));
+    }on AppException catch(e){
+      emit(AddWishListErrorState(message: e.message??''));
+    }
+  }
+  Future<void> getWishList()async{
+    try{
+      emit(GetWishListLoadingState());
+      var getWishListResponce = await getWishListUseCase.invoke();
+      wishList = getWishListResponce.data??[];
+      emit(GetWishListSuccesState(getWishListResponce: getWishListResponce));
+    }on AppException catch(e){
+      emit(GetWishListErrorState(message: e.message??''));
+    }
+  }
+  Future<void> deleteProductFromWishList(String productId) async {
+    try {
+      emit(DeleteWishListLoadingState());
+      await deleteItemWishListUseCase.invoke(productId);
+      emit(DeleteWishListSuccesState());
+      await getWishList();
+    } on AppException catch (e) {
+      emit(DeleteWishListErrorState(message: e.message ?? ''));
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
   AddCartUseCase addCartUseCase;
   GetCartUseCase getCartUseCase ;
   DeleteItemCartUseCase deleteItemCartUseCase;
@@ -62,4 +116,4 @@ class CartViewModel extends Cubit<CartStates>{
       emit(UpdateItemErrorState(message: e.message!));
     }
   }
-}
+ */
