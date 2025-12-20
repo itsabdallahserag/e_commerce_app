@@ -1,4 +1,4 @@
-import 'package:e_commerce_app/domain/entites/responce/wishlist/add_wishlist_responce.dart';
+import 'package:e_commerce_app/domain/entites/responce/wishlist/addwishlist/add_wishlist_responce.dart';
 import 'package:e_commerce_app/domain/repository/wishlist/wishlist_repository.dart';
 import 'package:injectable/injectable.dart';
 

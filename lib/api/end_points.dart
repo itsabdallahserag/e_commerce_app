@@ -5,7 +5,8 @@ class EndPoints{
   static const String apiCategories = 'api/v1/categories';
   static const String apiBrands = 'api/v1/brands';
   static const String apiProducts = 'api/v1/products';
-  static const String apiAddProductToCart = 'api/v1/cart';
+  static const String apiAddOrGetProductToCart = 'api/v1/cart';
   static const String removeProductInCart = 'api/v1/cart/';
-  static const String apiAddProductToWishList = 'api/v1/wishlist';
+  static const String apiAddOrGetProductToWishList = 'api/v1/wishlist';
+  static const String apiRemoveProducFromWishList = 'api/v1/wishlist/';
 }

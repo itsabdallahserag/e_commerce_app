@@ -6,6 +6,7 @@ import 'package:e_commerce_app/features/ui/pages/cart/cubit/cart_states.dart';
 import 'package:e_commerce_app/features/ui/pages/cart/cubit/cart_view_model.dart';
 import 'package:e_commerce_app/features/ui/pages/home/cubit/home_screen_states.dart';
 import 'package:e_commerce_app/features/ui/pages/home/cubit/home_screen_view_model.dart';
+import 'package:e_commerce_app/features/ui/pages/home/tabs/favorite_tab/cubit/wishlist_view_model.dart';
 import 'package:e_commerce_app/features/ui/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     CartViewModel.get(context).getCart();
+    WishListViewModel.get(context).getWishList();
   }
   HomeScreenViewModel viewModel = getIt<HomeScreenViewModel>();
   @override

@@ -66,6 +66,10 @@ import '../domain/use_cases/products/products_use_case.dart' as _i709;
 import '../domain/use_cases/register_use_case.dart' as _i772;
 import '../domain/use_cases/wishlist/addwishlist/add_wishlist_use_case.dart'
     as _i200;
+import '../domain/use_cases/wishlist/deletewishlist/delete_wishlist_use_case.dart'
+    as _i332;
+import '../domain/use_cases/wishlist/getwishlist/get_wishlist_use_case.dart'
+    as _i421;
 import '../features/ui/auth/login/cubit/login_view_model.dart' as _i1040;
 import '../features/ui/auth/register/cubit/register_view_model.dart' as _i586;
 import '../features/ui/pages/cart/cubit/cart_view_model.dart' as _i888;
@@ -194,6 +198,16 @@ extension GetItInjectableX on _i174.GetIt {
         authRemoteDataSource: gh<_i16.AuthRemoteDataSource>(),
       ),
     );
+    gh.factory<_i332.DeleteItemWishListUseCase>(
+      () => _i332.DeleteItemWishListUseCase(
+        wishListRepository: gh<_i1054.WishListRepository>(),
+      ),
+    );
+    gh.factory<_i421.GetWishListUseCase>(
+      () => _i421.GetWishListUseCase(
+        wishListRepository: gh<_i1054.WishListRepository>(),
+      ),
+    );
     gh.factory<_i826.LoginUseCase>(
       () => _i826.LoginUseCase(authRepository: gh<_i824.AuthRepository>()),
     );
@@ -203,6 +217,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i493.WishListViewModel>(
       () => _i493.WishListViewModel(
         addWishListUseCase: gh<_i200.AddWishListUseCase>(),
+        getWishListUseCase: gh<_i421.GetWishListUseCase>(),
+        deleteItemWishListUseCase: gh<_i332.DeleteItemWishListUseCase>(),
       ),
     );
     gh.factory<_i947.BrandsUseCase>(

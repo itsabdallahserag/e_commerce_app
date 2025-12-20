@@ -1,11 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:e_commerce_app/api/api_services.dart';
 import 'package:e_commerce_app/api/mappers/add_wishlist_responce_mapper.dart';
+import 'package:e_commerce_app/api/mappers/delete_wishlist_responce_mapper.dart';
+import 'package:e_commerce_app/api/mappers/get_wishlist_responce_mapper.dart';
 import 'package:e_commerce_app/api/models/request/add_product_request_dto.dart';
 import 'package:e_commerce_app/core/cash/shared_prefs_utils.dart';
 import 'package:e_commerce_app/core/exciption/app_exception.dart';
 import 'package:e_commerce_app/data/data_sources/remote/wishlist/wishlist_remote_data_source.dart';
-import 'package:e_commerce_app/domain/entites/responce/wishlist/add_wishlist_responce.dart';
+import 'package:e_commerce_app/domain/entites/responce/wishlist/addwishlist/add_wishlist_responce.dart';
+import 'package:e_commerce_app/domain/entites/responce/wishlist/deletewishlist/delete_wishlist_responce.dart';
+import 'package:e_commerce_app/domain/entites/responce/wishlist/getwishlist/get_wishlist_responce.dart';
 import 'package:injectable/injectable.dart';
 @Injectable(as: WishListRemoteDataSource)
 class WishListCartRemoteDataSourceImpl implements WishListRemoteDataSource{
@@ -21,6 +25,30 @@ class WishListCartRemoteDataSourceImpl implements WishListRemoteDataSource{
       var token = SharedPrefsUtils.getData(key: 'token') as String?;
       var addWishListResponce = await apiServices.addWishList(productRequest, token??'');
       return addWishListResponce.toAddWishListResponce();
+    }on DioException catch (e){
+      String? message = e.error is AppException ? (e.error as AppException).message ?? '' : e.message;
+      throw ServerException(message: message);
+    }
+  }
+
+  @override
+  Future<GetWishListResponce> getWishList() async {
+    try{
+      var token = SharedPrefsUtils.getData(key: 'token') as String?;
+      var getWishListResponce = await apiServices.getWishList(token??'');
+      return getWishListResponce.toGetWishListResponce();
+    }on DioException catch (e){
+      String? message = e.error is AppException ? (e.error as AppException).message ?? '' : e.message;
+      throw ServerException(message: message);
+    }
+  }
+
+  @override
+  Future<DeleteWishlistResponce> deleteProductFromWishList(String productId) async {
+    try{
+      var token = SharedPrefsUtils.getData(key: 'token') as String?;
+      var deleteWishListResponce = await apiServices.deleteProductFromWishList(productId, token??"");
+      return deleteWishListResponce.toDeleteWishListResponce();
     }on DioException catch (e){
       String? message = e.error is AppException ? (e.error as AppException).message ?? '' : e.message;
       throw ServerException(message: message);
