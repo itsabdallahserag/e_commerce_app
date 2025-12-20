@@ -3,11 +3,13 @@ import 'package:e_commerce_app/core/utils/app_colors.dart';
 import 'package:e_commerce_app/core/utils/app_images.dart';
 import 'package:e_commerce_app/core/utils/app_styles.dart';
 import 'package:e_commerce_app/domain/entites/responce/products/product.dart';
+import 'package:e_commerce_app/features/ui/pages/cart/cubit/cart_view_model.dart';
+import 'package:e_commerce_app/features/ui/pages/home/tabs/favorite_tab/cubit/wishlist_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 class ProductTabItem extends StatelessWidget {
   final Product product;
-  const ProductTabItem({super.key, required this.product});
+  const ProductTabItem({super.key, required this.product,});
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +82,9 @@ class ProductTabItem extends StatelessWidget {
                         Image.asset(AppImages.iconStar),
                         const Spacer(),
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            CartViewModel.get(context).addCart(product.id!);
+                          },
                           child: Container(
                             padding: const EdgeInsets.all(6),
                             decoration: const BoxDecoration(
@@ -100,7 +104,9 @@ class ProductTabItem extends StatelessWidget {
           ),
 
           InkWell(
-            onTap: () {},
+            onTap: () {
+              WishListViewModel.get(context).addWishList(product.id??'');
+            },
             child: Container(
               padding: const EdgeInsets.all(6),
               margin: const EdgeInsets.all(6),

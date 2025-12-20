@@ -14,4 +14,5 @@ class AppImages{
  static const String iconUserPrimary = 'assets/images/iconuserprimary.png';
  static const String iconStar = 'assets/images/iconStar.png';
  static const String iconCart2 = 'assets/images/iconcart2.png';
+ static const String iconFavoriteWishList = 'assets/images/iconfavoritewishlist.png';
 }
